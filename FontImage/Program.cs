@@ -235,7 +235,20 @@ namespace FontImage
                 graphics.DrawString(name, font, new SolidBrush(Color.Black), new Rectangle(0, 0, img.Width, (int) (sizeTest.Height > img.Height ? sizeTest.Height : img.Height)), format);
                 img.Save($@"{strFolder}/m_{Path.GetFileNameWithoutExtension(strFile)}_1.png", ImageFormat.Png);
 
-                font = new Font(fonts.Families[0], 22);
+
+                size = 22;
+                while (true)
+                {
+                    font = new Font(fonts.Families[0], size);
+                    sizeTest = graphics.MeasureString(name, font);
+                    if (sizeTest.Width > img.Width)
+                    {
+                        size--;
+                        continue;
+                    }
+                    break;
+                }
+                font = new Font(fonts.Families[0], size);
                 img = new Bitmap(316, 74);
                 graphics = Graphics.FromImage(img);
                 graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
