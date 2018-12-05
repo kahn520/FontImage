@@ -151,7 +151,7 @@ namespace FontImage
             foreach (string line in lines)
             {
                 var splits = line.Split('\t');
-                if (splits.Length > 1 && splits[1].StartsWith("http"))
+                if (splits.Length > 1 && splits[1].Trim().StartsWith("http"))
                 {
                     try
                     {
@@ -191,7 +191,7 @@ namespace FontImage
                 graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
                 graphics.Clear(Color.White);
                 StringFormat format = new StringFormat();
-                format.Alignment = StringAlignment.Center;
+                format.Alignment = StringAlignment.Near;
                 format.LineAlignment = StringAlignment.Center;
 
                 int size = 18;
