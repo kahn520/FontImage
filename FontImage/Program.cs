@@ -183,7 +183,7 @@ namespace FontImage
                 PrivateFontCollection fonts = new PrivateFontCollection();
                 fonts.AddFontFile(strFile);
                 Font font;
-                string name = Path.GetFileNameWithoutExtension(strFile);
+                string strName = Path.GetFileNameWithoutExtension(strFile);
                 Bitmap img = new Bitmap(230, 26);
                 Graphics graphics = Graphics.FromImage(img);
                 graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
@@ -199,7 +199,7 @@ namespace FontImage
                 while (true)
                 {
                     font = new Font(fonts.Families[0], size);
-                    sizeTest = graphics.MeasureString(name, font);
+                    sizeTest = graphics.MeasureString(strName, font);
                     if (sizeTest.Width > img.Width)
                     {
                         size--;
@@ -207,8 +207,8 @@ namespace FontImage
                     }
                     break;
                 }
-                graphics.DrawString(name, font, new SolidBrush(Color.Black), new Rectangle(0, 0, img.Width, (int)(sizeTest.Height > img.Height ? sizeTest.Height : img.Height)), format);
-                img.Save($@"{strFolder}/1_{Path.GetFileNameWithoutExtension(strFile)}_1.png", ImageFormat.Png);
+                graphics.DrawString(strName, font, new SolidBrush(Color.Black), new Rectangle(0, 0, img.Width, (int)(sizeTest.Height > img.Height ? sizeTest.Height : img.Height)), format);
+                img.Save($@"{strFolder}/1_{strName}_1.png", ImageFormat.Png);
                 
                 img = new Bitmap(280, 74);
                 graphics = Graphics.FromImage(img);
@@ -223,7 +223,7 @@ namespace FontImage
                 while (true)
                 {
                     font = new Font(fonts.Families[0], size);
-                    sizeTest = graphics.MeasureString(name, font);
+                    sizeTest = graphics.MeasureString(strName, font);
                     if (sizeTest.Width > img.Width)
                     {
                         size--;
@@ -232,15 +232,15 @@ namespace FontImage
                     break;
                 }
 
-                graphics.DrawString(name, font, new SolidBrush(Color.Black), new Rectangle(0, 0, img.Width, (int) (sizeTest.Height > img.Height ? sizeTest.Height : img.Height)), format);
-                img.Save($@"{strFolder}/m_{Path.GetFileNameWithoutExtension(strFile)}_1.png", ImageFormat.Png);
+                graphics.DrawString(strName, font, new SolidBrush(Color.Black), new Rectangle(0, 0, img.Width, (int) (sizeTest.Height > img.Height ? sizeTest.Height : img.Height)), format);
+                img.Save($@"{strFolder}/m_{strName}_1.png", ImageFormat.Png);
 
 
                 size = 22;
                 while (true)
                 {
                     font = new Font(fonts.Families[0], size);
-                    sizeTest = graphics.MeasureString(name, font);
+                    sizeTest = graphics.MeasureString(strName, font);
                     if (sizeTest.Width > img.Width)
                     {
                         size--;
@@ -258,8 +258,8 @@ namespace FontImage
                 format = new StringFormat();
                 format.Alignment = StringAlignment.Center;
                 format.LineAlignment = StringAlignment.Center;
-                graphics.DrawString(name, font, new SolidBrush(Color.White), new Rectangle(0, 0, img.Width, img.Height), format);
-                img.Save($@"{strFolder}/{Path.GetFileNameWithoutExtension(strFile)}_1.png", ImageFormat.Png);
+                graphics.DrawString(strName, font, new SolidBrush(Color.White), new Rectangle(0, 0, img.Width, img.Height), format);
+                img.Save($@"{strFolder}/{strName}_1.png", ImageFormat.Png);
 
                 int[] iMobile = GetMobileWidth(fonts.Families[0]);
                 font = new Font(fonts.Families[0], iMobile[1]);
@@ -269,12 +269,36 @@ namespace FontImage
                 graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                 graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
                 graphics.Clear(Color.Transparent);
-                graphics.DrawString(name, font, new SolidBrush(Color.Black), 0, 0);
+                graphics.DrawString(strName, font, new SolidBrush(Color.Black), 0, 0);
 
                 int[] iBorder = GetMobileBorder(img as Bitmap);
                 Bitmap bitmapMobile = img.Clone(new System.Drawing.Rectangle(iBorder[0], iBorder[1], iBorder[2] - iBorder[0] + 1, iBorder[3] - iBorder[1] + 1), img.PixelFormat);
                 Image imgSave = new Bitmap(bitmapMobile, (int)(50.0f / bitmapMobile.Height * bitmapMobile.Width), 50);
-                imgSave.Save($@"{strFolder}/a_{Path.GetFileNameWithoutExtension(strFile)}_1.png", ImageFormat.Png);
+                imgSave.Save($@"{strFolder}/a_{strName}_1.png", ImageFormat.Png);
+
+                size = 18;
+                while (true)
+                {
+                    font = new Font(fonts.Families[0], size);
+                    Size stringSize = GetStringSize(strName, font, size);
+                    if(stringSize.Width > 290)
+                    {
+                        size--;
+                        continue;
+                    }
+                    img = new Bitmap(stringSize.Width, 30);
+                    graphics = Graphics.FromImage(img);
+                    graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                    graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+                    graphics.Clear(Color.Transparent);
+                    StringFormat stringFormat = new StringFormat();
+                    stringFormat.LineAlignment = StringAlignment.Center;
+                    stringFormat.Alignment = StringAlignment.Center;
+                    graphics.DrawString(strName, font, new SolidBrush(Color.Black), new Rectangle(0, 0, img.Width, img.Height), stringFormat);
+                    img.Save($@"{strFolder}/s_{strName}_1.png", ImageFormat.Png);
+                    break;
+                }
 
                 graphics.Dispose();
                 img.Dispose();
@@ -311,6 +335,11 @@ namespace FontImage
                 iFontSize++;
             }
 
+        }
+
+        static Size GetStringSize(string strText, Font font, int iFontSize)
+        {
+            return TextRenderer.MeasureText(strText, font, new Size(100, 100), TextFormatFlags.SingleLine);
         }
 
         static int[] GetMobileBorder(Bitmap img)
