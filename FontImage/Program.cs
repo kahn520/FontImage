@@ -280,7 +280,7 @@ namespace FontImage
                 while (true)
                 {
                     font = new Font(fonts.Families[0], size);
-                    Size stringSize = GetStringSize(strName, font, size);
+                    Size stringSize = GetStringSize(strName, font);
                     if(stringSize.Width > 290)
                     {
                         size--;
@@ -292,10 +292,10 @@ namespace FontImage
                     graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                     graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
                     graphics.Clear(Color.Transparent);
-                    StringFormat stringFormat = new StringFormat();
-                    stringFormat.LineAlignment = StringAlignment.Center;
-                    stringFormat.Alignment = StringAlignment.Center;
-                    graphics.DrawString(strName, font, new SolidBrush(Color.Black), new Rectangle(0, 0, img.Width, img.Height), stringFormat);
+                    StringFormat stringFormat = StringFormat.GenericTypographic;
+                    StringFormat.GenericTypographic.LineAlignment = StringAlignment.Center;
+                    StringFormat.GenericTypographic.FormatFlags = StringFormatFlags.NoWrap;
+                    graphics.DrawString(strName, font, new SolidBrush(Color.Black), new Rectangle(0, 0, img.Width, img.Height + 5), stringFormat);
                     img.Save($@"{strFolder}/s_{strName}_1.png", ImageFormat.Png);
                     break;
                 }
@@ -337,9 +337,11 @@ namespace FontImage
 
         }
 
-        static Size GetStringSize(string strText, Font font, int iFontSize)
+        static Size GetStringSize(string strText, Font font)
         {
-            return TextRenderer.MeasureText(strText, font, new Size(100, 100), TextFormatFlags.SingleLine);
+            TextFormatFlags flags = TextFormatFlags.Left |
+        TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine;
+            return TextRenderer.MeasureText(strText, font, new Size(10, 10));
         }
 
         static int[] GetMobileBorder(Bitmap img)
