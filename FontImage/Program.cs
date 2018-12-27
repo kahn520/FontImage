@@ -27,7 +27,7 @@ namespace FontImage
         {
             while(true)
             {
-                Console.WriteLine("1:字体截图。2:字体下载。3:图标ppt拆分。4:word加第一页图片。");
+                Console.WriteLine("1:字体截图。2:字体下载。3:图标ppt拆分。4:word加第一页图片。5:批量设置SVG颜色。");
                 string strAction = Console.ReadLine();
                 if (strAction == "1")
                 {
@@ -44,6 +44,16 @@ namespace FontImage
                 else if (strAction == "4")
                 {
                     AddWordFirstPageImgge();
+                }
+                else if (strAction == "5")
+                {
+                    FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+                    if (folderBrowserDialog.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+                    SVGColor svg = new SVGColor(folderBrowserDialog.SelectedPath);
+                    svg.ChangeColor();
                 }
             }
         }
