@@ -15,27 +15,16 @@ namespace FontImage
             _strFolder = strFolder;
         }
 
-        public void ChangeColor()
+        public void ChangeColor(string strOld, string strNew)
         {
             foreach(string strSvg in Directory.GetFiles(_strFolder,"*.svg", SearchOption.AllDirectories))
             {
-                XmlDocument doc = new XmlDocument();
-                XmlNamespaceManager nsMgr = new XmlNamespaceManager(doc.NameTable);
-                nsMgr.AddNamespace("ns", "http://www.w3.org/2000/svg");
-                doc.Load(strSvg);
-                XmlNode nodeSvg = doc.SelectSingleNode("/ns:svg", nsMgr);
-                XmlNode nodeStyle = nodeSvg.SelectSingleNode("/ns:style", nsMgr);
-                if (nodeStyle == null)
+                string strText = File.ReadAllText(strSvg);
+                if (strText.Contains(strOld))
                 {
-                    nodeStyle = doc.CreateElement("style");
-                    nodeStyle = nodeSvg.InsertBefore(nodeStyle, nodeSvg.ChildNodes[0]);
-                    XmlAttribute attribute = doc.CreateAttribute("type");
-                    attribute.Value = "text/css";
-                    nodeStyle.Attributes.Append(attribute);
+                    strText = strText.Replace(strOld, strNew);
+                    File.WriteAllText(strSvg, strText);
                 }
-
-                nodeStyle.InnerText = ".st0{fill:#D5261B;}";
-                doc.Save(strSvg);
             }
         }
     }

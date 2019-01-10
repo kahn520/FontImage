@@ -47,13 +47,28 @@ namespace FontImage
                 }
                 else if (strAction == "5")
                 {
+                    Console.WriteLine("输入旧值:");
+                    string strOld = Console.ReadLine();
+                    if (!strOld.StartsWith("#") || strOld.Length != 7)
+                    {
+                        Console.WriteLine("输入有误");
+                        continue;
+                    }
+
+                    Console.WriteLine("输入新值:");
+                    string strNew = Console.ReadLine();
+                    if (!strNew.StartsWith("#") || strNew.Length != 7)
+                    {
+                        Console.WriteLine("输入有误");
+                        continue;
+                    }
                     FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
                     if (folderBrowserDialog.ShowDialog() != DialogResult.OK)
                     {
-                        return;
+                        continue;
                     }
                     SVGColor svg = new SVGColor(folderBrowserDialog.SelectedPath);
-                    svg.ChangeColor();
+                    svg.ChangeColor(strOld, strNew);
                 }
             }
         }
