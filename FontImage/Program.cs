@@ -194,17 +194,31 @@ namespace FontImage
         static void ExportFontImage()
         {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            if(folderBrowserDialog.ShowDialog() != DialogResult.OK)
+            if (folderBrowserDialog.ShowDialog() != DialogResult.OK)
             {
                 return;
             }
             string strFolder = folderBrowserDialog.SelectedPath;
+            //string strFolder = @"I:\新建文件夹";
 
             var files = Directory.GetFiles(strFolder).Where(f => f.EndsWith(".ttf", true, null) || f.EndsWith(".otf", true, null));
             int count = files.Count();
             int i = 0;
             foreach (string strFile in files)
             {
+                FontImage fontImage = new FontImage(strFile);
+                try
+                {
+                    fontImage.ExportFontImage(strFolder);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"错误：{strFile}");
+                    Console.WriteLine(e.Message);
+                }
+                
+                continue;
+
                 PrivateFontCollection fonts = new PrivateFontCollection();
                 fonts.AddFontFile(strFile);
                 Font font;
