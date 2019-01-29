@@ -143,7 +143,7 @@ namespace FontImage
             StringFormat.GenericTypographic.LineAlignment = StringAlignment.Center;
             StringFormat.GenericTypographic.FormatFlags = StringFormatFlags.NoWrap;
 
-            bool bAdd = fontSize > 1;
+            bool bAdd = fontSize == 1;
             Font font;
             while (true)
             {
@@ -176,7 +176,7 @@ namespace FontImage
                 if (bAdd)
                     fontSize++;
                 else
-                    fontSize++;
+                    fontSize--;
             }
 
             font = new Font(fontFamily, fontSize);

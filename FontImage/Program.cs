@@ -206,6 +206,7 @@ namespace FontImage
             int i = 0;
             foreach (string strFile in files)
             {
+                Console.WriteLine($"{++i}:{strFile}");
                 FontImage fontImage = new FontImage(strFile);
                 try
                 {
