@@ -23,8 +23,8 @@ namespace FontImage
             string strName = Path.GetFileNameWithoutExtension(_strFontFile);
             GetFontImage($@"{strFolder}/1_{strName}_1.png",
                 Color.Black,
-                Color.White,
-                18,
+                Color.Transparent,
+                16,
                 new Size(230, 26),
                 StringAlignment.Near,
                 StringAlignment.Center);
@@ -107,10 +107,11 @@ namespace FontImage
             stringFormat.LineAlignment = alignVercical;
 
             Font font;
+            SizeF sizeTest;
             while (true)
             {
                 font = new Font(fontFamily, fontSize);
-                SizeF sizeTest = graphics.MeasureString(strText, font, imgSize, stringFormat);
+                sizeTest = graphics.MeasureString(strText, font, imgSize, stringFormat);
                 if (sizeTest.Width > bitmap.Width)
                 {
                     fontSize--;
@@ -119,7 +120,7 @@ namespace FontImage
                 break;
             }
 
-            graphics.DrawString(strText, font, new SolidBrush(colorFont), new Rectangle(0,0, bitmap.Width, bitmap.Height), stringFormat);
+            graphics.DrawString(strText, font, new SolidBrush(colorFont), new Rectangle(0, (int) ((bitmap.Height- sizeTest.Height)/2), bitmap.Width, bitmap.Height), stringFormat);
             bitmap.Save(strImgName, strImgName.EndsWith("jpg") ? ImageFormat.Jpeg : ImageFormat.Png);
             graphics.Dispose();
             bitmap.Dispose();
